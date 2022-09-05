@@ -2673,6 +2673,11 @@ func getName(fd *desc.FieldDescriptor) string {
 
 // knownFieldTags return tags of present and recognized fields, in sorted order.
 func (m *Message) knownFieldTags() []int {
+	if len(m.GetKnownFields()) > len(m.values) {
+		for _, item := range m.GetKnownFields() {
+			m.PutValueField(item, m.GetField(item))
+		}
+	}
 	if len(m.values) == 0 {
 		return []int(nil)
 	}
